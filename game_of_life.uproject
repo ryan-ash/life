@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.27",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "game_of_life",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
