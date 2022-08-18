@@ -27,6 +27,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     TMap<int32, FCellBlock> CellsAliveAtStart;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+    int32 Iteration = 0;
+
     UFUNCTION(BlueprintCallable)
     void Initialize();
 

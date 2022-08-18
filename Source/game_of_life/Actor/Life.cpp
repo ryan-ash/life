@@ -81,5 +81,6 @@ void ALife::LifeIteration()
     }
     Cells = NewCells;
 
+    Iteration++;
     Texture->UpdateTexture();
 }
