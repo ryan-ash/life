@@ -3,6 +3,7 @@
 #include <CoreMinimal.h>
 
 #include "Types/CellBlock.h"
+#include "Types/WrapMode.h"
 #include "Utils/DynamicTexture.h"
 
 #include "Life.generated.h"
@@ -29,6 +30,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     int32 Iteration = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+    EWrapMode WrapMode = EWrapMode::Finite;
 
     UFUNCTION(BlueprintCallable)
     void Initialize();

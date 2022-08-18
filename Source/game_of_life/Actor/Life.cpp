@@ -47,15 +47,27 @@ int32 ALife::GetAliveNeighbors(int32 X, int32 Y)
         {
             const int32 NeighborX = X + XOffset;
             const int32 NeighborY = Y + YOffset;
-            if (
-                (XOffset == 0 && YOffset == 0) ||
-                (NeighborX < 0 || NeighborX >= Width) ||
-                (NeighborY < 0 || NeighborY >= Height)
-            )
-            {
+            if (WrapMode == EWrapMode::Finite)
+                if (NeighborX < 0 || NeighborX >= Width || NeighborY < 0 || NeighborY >= Height)
+                    continue;
+            if (XOffset == 0 && YOffset == 0)
                 continue;
+
+            int32 FinalNeighborX = NeighborX;
+            int32 FinalNeighborY = NeighborY;
+            if (WrapMode == EWrapMode::Portal)
+            {
+                if (NeighborX < 0)
+                    FinalNeighborX = Width - 1;
+                else if (NeighborX >= Width)
+                    FinalNeighborX = 0;
+                if (NeighborY < 0)
+                    FinalNeighborY = Height - 1;
+                else if (NeighborY >= Height)
+                    FinalNeighborY = 0;
             }
-            if (GetCell(NeighborX, NeighborY))
+
+            if (GetCell(FinalNeighborX, FinalNeighborY))
             {
                 AliveNeighbors++;
             }
