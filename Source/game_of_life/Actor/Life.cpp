@@ -2,8 +2,11 @@
 
 void ALife::Initialize()
 {
-    Texture = NewObject<UDynamicTexture>(this, TEXT("Texture"));
-    Texture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+    if (!Texture)
+    {
+        Texture = NewObject<UDynamicTexture>(this, TEXT("Texture"));
+        Texture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+    }
 
     for (int32 Y = 0; Y < Height; Y++)
     {
@@ -95,4 +98,11 @@ void ALife::LifeIteration()
 
     Iteration++;
     Texture->UpdateTexture();
+}
+
+void ALife::Reset()
+{
+    Cells.Empty();
+    Iteration = 0;
+    Initialize();
 }

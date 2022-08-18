@@ -49,6 +49,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void LifeIteration();
 
+    UFUNCTION(BlueprintCallable)
+    void Reset();
+
 private:
 
     TArray<TArray<bool>> Cells;
