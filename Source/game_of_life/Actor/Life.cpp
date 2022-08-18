@@ -2,10 +2,12 @@
 
 void ALife::Initialize()
 {
-    if (!Texture)
+    if (!LifeTexture)
     {
-        Texture = NewObject<UDynamicTexture>(this, TEXT("Texture"));
-        Texture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+        LifeTexture = NewObject<UDynamicTexture>(this, TEXT("LifeTexture"));
+        AshTexture = NewObject<UDynamicTexture>(this, TEXT("AshTexture"));
+        LifeTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+        AshTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
     }
 
     for (int32 Y = 0; Y < Height; Y++)
@@ -25,15 +27,41 @@ void ALife::Initialize()
                 return false;
             }();
             Row.Add(CellValue);
-            Texture->SetPixel(Y, Width - X - 1, CellValue ? FLinearColor::White : FLinearColor::Black);
+            if (CellValue)
+            {
+                AshTexture->SetPixel(Y, Width - X - 1, FLinearColor::Gray);
+                AddAsh(X, Y);
+            }
+            LifeTexture->SetPixel(Y, Width - X - 1, CellValue ? FLinearColor::White : FLinearColor::Black);
         }
         Cells.Add(Row);
     }
 }
 
+void ALife::AddAsh(int32 X, int32 Y)
+{
+    if (!Ash.Contains(Y))
+    {
+        Ash.Add(Y, FCellBlock());
+    }
+    Ash[Y].Cells.Add(X);
+    AshTexture->SetPixel(Y, Width - X - 1, FLinearColor::Gray);
+}
+
+float ALife::GetAshPercentage()
+{
+    int32 AshCount = 0;
+    for (auto AshRow : Ash)
+    {
+        AshCount += AshRow.Value.Cells.Num();
+    }
+    return AshCount / (float)(Width * Height);
+}
+
 void ALife::SetCell(int32 X, int32 Y, bool Value)
 {
     Cells[Y][X] = Value;
+    AddAsh(X, Y);
 }
 
 bool ALife::GetCell(int32 X, int32 Y)
@@ -90,19 +118,28 @@ void ALife::LifeIteration()
             int32 NumNeighbors = GetAliveNeighbors(X, Y);
             const bool WillBeAlive = GetCell(X, Y) ? (NumNeighbors == 2 || NumNeighbors == 3) : (NumNeighbors == 3);
             Row.Add(WillBeAlive);
-            Texture->SetPixel(Y, Width - X - 1, WillBeAlive ? FLinearColor::White : FLinearColor::Black);
+            if (WillBeAlive)
+            {
+                AddAsh(X, Y);
+            }
+            LifeTexture->SetPixel(Y, Width - X - 1, WillBeAlive ? FLinearColor::White : FLinearColor::Black);
         }
         NewCells.Add(Row);
     }
     Cells = NewCells;
 
     Iteration++;
-    Texture->UpdateTexture();
+    LifeTexture->UpdateTexture();
+    AshTexture->UpdateTexture();
 }
 
 void ALife::Reset()
 {
+    Ash.Empty();
     Cells.Empty();
+    AshTexture->Fill(FLinearColor::Black);
     Iteration = 0;
     Initialize();
+    LifeTexture->UpdateTexture();
+    AshTexture->UpdateTexture();
 }

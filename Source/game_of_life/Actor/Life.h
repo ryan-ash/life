@@ -23,10 +23,16 @@ public:
     int32 Height = 1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-    UDynamicTexture* Texture;
+    UDynamicTexture* LifeTexture;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UDynamicTexture* AshTexture;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     TMap<int32, FCellBlock> CellsAliveAtStart;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+    TMap<int32, FCellBlock> Ash;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     int32 Iteration = 0;
@@ -36,6 +42,12 @@ public:
 
     UFUNCTION(BlueprintCallable)
     void Initialize();
+
+    UFUNCTION(BlueprintCallable)
+    void AddAsh(int32 X, int32 Y);
+
+    UFUNCTION(BlueprintCallable)
+    float GetAshPercentage();
 
     UFUNCTION(BlueprintCallable)
     void SetCell(int32 X, int32 Y, bool Value);
