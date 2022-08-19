@@ -14,7 +14,9 @@ void UDynamicTexture::Initialize(int32 InWidth, int32 InHeight, FLinearColor InC
 
 	// Create the UTexture2D to render to
 	Texture = UTexture2D::CreateTransient(TextureWidth, TextureHeight);
-	Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
+	#if UE_EDITOR
+		Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
+	#endif
 	Texture->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap; // The VectorDisplacementMap is a raw RGBA8 format
 	Texture->SRGB = 1;
 	Texture->Filter = FilterMethod;
