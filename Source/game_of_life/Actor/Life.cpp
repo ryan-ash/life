@@ -60,9 +60,11 @@ float ALife::GetAshPercentage()
 
 void ALife::SetCell(int32 X, int32 Y, bool Value)
 {
-    Cells[Y][X] = Value;
-    AddAsh(X, Y);
-    LifeTexture->SetPixel(Y, Width - X - 1, Value ? FLinearColor::White : FLinearColor::Black);
+    const int32 FinalX = FMath::Clamp(X, 0, Width - 1);
+    const int32 FinalY = FMath::Clamp(Y, 0, Height - 1);
+    Cells[FinalY][FinalX] = Value;
+    AddAsh(FinalX, FinalY);
+    LifeTexture->SetPixel(FinalY, Width - FinalX - 1, Value ? FLinearColor::White : FLinearColor::Black);
     LifeTexture->UpdateTexture();
 }
 
