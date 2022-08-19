@@ -62,6 +62,8 @@ void ALife::SetCell(int32 X, int32 Y, bool Value)
 {
     Cells[Y][X] = Value;
     AddAsh(X, Y);
+    LifeTexture->SetPixel(Y, Width - X - 1, Value ? FLinearColor::White : FLinearColor::Black);
+    LifeTexture->UpdateTexture();
 }
 
 bool ALife::GetCell(int32 X, int32 Y)
