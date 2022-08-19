@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-VoxelHelpers.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Work\git\game_of_life\Intermediate\Build\Win64\game_of_lifeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"D:\Work\git\game_of_life\Plugins\VoxelFree\Intermediate\Build\Win64\UnrealEditor\Development\VoxelHelpers\Module.VoxelHelpers.cpp.obj"
+"D:\Work\git\game_of_life\Plugins\VoxelFree\Intermediate\Build\Win64\UnrealEditor\Development\VoxelHelpers\Module.VoxelHelpers.gen.cpp.obj"
+"D:\Work\git\game_of_life\Plugins\VoxelFree\Intermediate\Build\Win64\UnrealEditor\Development\VoxelHelpers\Default.rc2.res"
+/OUT:"D:\Work\git\game_of_life\Plugins\VoxelFree\Intermediate\Build\Win64\UnrealEditor\Development\VoxelHelpers\UnrealEditor-VoxelHelpers.lib"

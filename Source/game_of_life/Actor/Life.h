@@ -70,4 +70,6 @@ public:
 private:
 
     TArray<TArray<bool>> Cells;
+    TArray<TArray<TArray<bool>>> CellsCache;
+    TArray<TMap<int32, FCellBlock>> AshCache;
 };

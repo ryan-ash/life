@@ -1,0 +1,17 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\intermediate\\build\\win64\\unrealeditor\\development\\voxelexamples\\module.voxelexamples.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\work\\git\\game_of_life\\intermediate\\build\\win64\\game_of_lifeeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\intermediate\\build\\win64\\unrealeditor\\development\\voxelexamples\\definitions.voxelexamples.h",
+            "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\source\\voxelexamples\\private\\voxelexamplesmodule.cpp",
+            "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\source\\voxelexamples\\public\\voxelexamplesmodule.h",
+            "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\intermediate\\build\\win64\\unrealeditor\\inc\\voxelexamples\\voxelexamplesmodule.generated.h",
+            "d:\\work\\git\\game_of_life\\plugins\\voxelfree\\source\\voxelexamples\\private\\voxelgeneratorexample.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
