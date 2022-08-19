@@ -64,6 +64,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void Reset();
 
+    UFUNCTION(BlueprintCallable)
+    void DrawShapeInTexture(UDynamicTexture* Texture, TMap<int32, FCellBlock> Shape, FLinearColor Color, int32 RowStart, int32 ColumnStart);
+
 private:
 
     TArray<TArray<bool>> Cells;

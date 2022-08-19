@@ -143,3 +143,23 @@ void ALife::Reset()
     LifeTexture->UpdateTexture();
     AshTexture->UpdateTexture();
 }
+
+void ALife::DrawShapeInTexture(UDynamicTexture* Texture, TMap<int32, FCellBlock> Shape, FLinearColor Color, int32 RowStart, int32 ColumnStart)
+{
+    if (!IsValid(Texture))
+    {
+        return;
+    }
+
+    Texture->Fill(FLinearColor::Black);
+    for (auto& ShapeRow : Shape)
+    {
+        for (auto& ShapeColumn : ShapeRow.Value.Cells)
+        {
+            const int32 FinalY = FMath::Clamp(RowStart + ShapeRow.Key, 0, Height - 1);
+            const int32 FinalX = FMath::Clamp(Width - (ColumnStart + ShapeColumn) - 1, 0, Width - 1);
+            Texture->SetPixel(FinalY, FinalX, Color);
+        }
+    }
+    Texture->UpdateTexture();
+}
