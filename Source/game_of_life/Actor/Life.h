@@ -27,6 +27,9 @@ public:
     int32 Height = 1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+    int32 GhostLength = 3;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
     float HeatTextureDecayLength = 1.f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -40,6 +43,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UDynamicTexture* EraseTexture;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UDynamicTexture* GhostTexture;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     TMap<int32, FCellBlock> CellsAliveAtStart;
@@ -69,6 +75,9 @@ public:
     bool GetCell(int32 X, int32 Y);
 
     UFUNCTION(BlueprintPure)
+    bool GetCellFromCache(int32 X, int32 Y, int32 Rollback);
+
+    UFUNCTION(BlueprintPure)
     int32 GetAliveNeighbors(int32 X, int32 Y);
 
     UFUNCTION(BlueprintCallable)
@@ -83,7 +92,12 @@ public:
     UFUNCTION(BlueprintCallable)
     void DrawShapeInTexture(UDynamicTexture* Texture, TMap<int32, FCellBlock> Shape, FLinearColor Color, int32 RowStart, int32 ColumnStart);
 
+    UFUNCTION(BlueprintCallable)
+    void RecordCache();
+
 private:
+
+    void BuildGhostTexture();
 
     TArray<TArray<bool>> Cells;
     TArray<TArray<TArray<bool>>> CellsCache;

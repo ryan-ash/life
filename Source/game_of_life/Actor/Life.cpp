@@ -32,10 +32,12 @@ void ALife::Initialize()
         AshTexture = NewObject<UDynamicTexture>(this, TEXT("AshTexture"));
         PaintTexture = NewObject<UDynamicTexture>(this, TEXT("PaintTexture"));
         EraseTexture = NewObject<UDynamicTexture>(this, TEXT("EraseTexture"));
+        GhostTexture = NewObject<UDynamicTexture>(this, TEXT("GhostTexture"));
         LifeTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
         AshTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
         PaintTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
         EraseTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+        GhostTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
     }
 
     for (int32 Y = 0; Y < Height; Y++)
@@ -64,6 +66,8 @@ void ALife::Initialize()
         }
         Cells.Add(Row);
     }
+
+    RecordCache();
 }
 
 void ALife::AddAsh(int32 X, int32 Y)
@@ -93,7 +97,6 @@ void ALife::SetCell(int32 X, int32 Y, bool Value)
     Cells[FinalY][FinalX] = Value;
     AddAsh(FinalX, FinalY);
     LifeTexture->SetPixel(FinalY, Width - FinalX - 1, Value ? FLinearColor::White : FLinearColor::Black);
-    LifeTexture->UpdateTexture();
     if (Value)
     {
         PaintTexture->SetPixel(FinalY, Width - FinalX - 1, FLinearColor::White);
@@ -107,6 +110,17 @@ void ALife::SetCell(int32 X, int32 Y, bool Value)
 bool ALife::GetCell(int32 X, int32 Y)
 {
     return Cells[Y][X];
+}
+
+bool ALife::GetCellFromCache(int32 X, int32 Y, int32 Rollback)
+{
+    const int32 CacheID = CellsCache.Num() - 1 - Rollback;
+    if (CellsCache.IsValidIndex(CacheID))
+    {
+        const auto& TargetCache = CellsCache[CacheID];
+        return TargetCache[Y][X];
+    }
+    return false;
 }
 
 int32 ALife::GetAliveNeighbors(int32 X, int32 Y)
@@ -169,9 +183,8 @@ void ALife::LifeIteration()
     Cells = NewCells;
 
     Iteration++;
-    LifeTexture->UpdateTexture();
-    AshTexture->UpdateTexture();
 
+    RecordCache();
     OnLifeIterationSwitched();
 }
 
@@ -179,6 +192,8 @@ void ALife::Reset()
 {
     Ash.Empty();
     Cells.Empty();
+    AshCache.Empty();
+    CellsCache.Empty();
     AshTexture->Fill(FLinearColor::Black);
     Iteration = 0;
     Initialize();
@@ -204,4 +219,51 @@ void ALife::DrawShapeInTexture(UDynamicTexture* Texture, TMap<int32, FCellBlock>
         }
     }
     Texture->UpdateTexture();
+}
+
+void ALife::RecordCache()
+{
+    if (Iteration < CellsCache.Num())
+    {
+        CellsCache.RemoveAt(CellsCache.Num() - 1);
+    }
+    if (Iteration < AshCache.Num())
+    {
+        AshCache.RemoveAt(AshCache.Num() - 1);
+    }
+    CellsCache.Add(Cells);
+    AshCache.Add(Ash);
+
+    BuildGhostTexture();
+    LifeTexture->UpdateTexture();
+    AshTexture->UpdateTexture();
+}
+
+void ALife::BuildGhostTexture()
+{
+    for (int32 I = 0; I < Height; I++)
+    {
+        for (int32 J = 0; J < Width; J++)
+        {
+            bool GhostFound = false;
+            if (!GetCell(J, I))
+            {
+                for (int32 X = 0; X < GhostLength; X++)
+                {
+                    if (GetCellFromCache(J, I, X + 1))
+                    {
+                        const float GhostDepth = static_cast<float>(GhostLength - X) / GhostLength;
+                        GhostTexture->SetPixel(I, Width - J - 1, FLinearColor(GhostDepth, GhostDepth, GhostDepth, 1.0f));
+                        GhostFound = true;
+                        break;
+                    }
+                }
+            }
+            if (!GhostFound)
+            {
+                GhostTexture->SetPixel(I, Width - J - 1, FLinearColor::Black);
+            }
+        }
+    }
+    GhostTexture->UpdateTexture();
 }
