@@ -72,7 +72,7 @@ void ALife::AddAsh(int32 X, int32 Y)
     {
         Ash.Add(Y, FCellBlock());
     }
-    Ash[Y].Cells.Add(X);
+    Ash[Y].Cells.AddUnique(X);
     AshTexture->SetPixel(Y, Width - X - 1, FLinearColor::Gray);
 }
 
