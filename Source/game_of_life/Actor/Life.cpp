@@ -171,6 +171,8 @@ void ALife::LifeIteration()
     Iteration++;
     LifeTexture->UpdateTexture();
     AshTexture->UpdateTexture();
+
+    OnLifeIterationSwitched();
 }
 
 void ALife::Reset()

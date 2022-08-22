@@ -72,10 +72,13 @@ public:
     int32 GetAliveNeighbors(int32 X, int32 Y);
 
     UFUNCTION(BlueprintCallable)
-    void LifeIteration();
+    virtual void LifeIteration();
 
     UFUNCTION(BlueprintCallable)
     void Reset();
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnLifeIterationSwitched();
 
     UFUNCTION(BlueprintCallable)
     void DrawShapeInTexture(UDynamicTexture* Texture, TMap<int32, FCellBlock> Shape, FLinearColor Color, int32 RowStart, int32 ColumnStart);
