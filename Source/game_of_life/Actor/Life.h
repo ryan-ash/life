@@ -14,6 +14,10 @@ class GAME_OF_LIFE_API ALife : public AActor
 {
     GENERATED_BODY()
 
+protected:
+
+    virtual void Tick(float DeltaTime) override;
+
 public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (UIMin = "1", UIMax = "9000", ClampMin = "1", ClampMax = "9000"))
@@ -22,11 +26,20 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (UIMin = "1", UIMax = "9000", ClampMin = "1", ClampMax = "9000"))
     int32 Height = 1;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+    float HeatTextureDecayLength = 1.f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UDynamicTexture* LifeTexture;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UDynamicTexture* AshTexture;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UDynamicTexture* PaintTexture;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UDynamicTexture* EraseTexture;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
     TMap<int32, FCellBlock> CellsAliveAtStart;

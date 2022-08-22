@@ -26,6 +26,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Dynamic Texture")
 	void SetPixel(int32 X, int32 Y, FLinearColor Color);
 
+	// Converts a specified pixel back to linear color
+	UFUNCTION(BlueprintCallable, Category = "Dynamic Texture")
+	FLinearColor GetPixel(int32 X, int32 Y);
+
 	// Fills the texture with a given color
 	UFUNCTION(BlueprintCallable, Category = "Dynamic Texture")
 	void Fill(FLinearColor Color);

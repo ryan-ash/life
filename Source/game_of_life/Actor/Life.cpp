@@ -1,13 +1,41 @@
 #include "Life.h"
 
+void ALife::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    if (!PaintTexture || !EraseTexture)
+    {
+        return;
+    }
+
+    const float Step = DeltaTime / HeatTextureDecayLength;
+    for (int32 I = 0; I < Height; I++)
+    {
+        for (int32 J = 0; J < Width; J++)
+        {
+            const float NewPaintPixel = FMath::Max(PaintTexture->GetPixel(I, J).R - Step, 0.f);
+            PaintTexture->SetPixel(I, J, FLinearColor(NewPaintPixel, NewPaintPixel, NewPaintPixel, 1.f));
+            const float NewErasePixel = FMath::Max(EraseTexture->GetPixel(I, J).R - Step, 0.f);
+            EraseTexture->SetPixel(I, J, FLinearColor(NewErasePixel, NewErasePixel, NewErasePixel, 1.f));
+        }
+    }
+    PaintTexture->UpdateTexture();
+    EraseTexture->UpdateTexture();
+}
+
 void ALife::Initialize()
 {
     if (!LifeTexture)
     {
         LifeTexture = NewObject<UDynamicTexture>(this, TEXT("LifeTexture"));
         AshTexture = NewObject<UDynamicTexture>(this, TEXT("AshTexture"));
+        PaintTexture = NewObject<UDynamicTexture>(this, TEXT("PaintTexture"));
+        EraseTexture = NewObject<UDynamicTexture>(this, TEXT("EraseTexture"));
         LifeTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
         AshTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+        PaintTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
+        EraseTexture->Initialize(Height, Width, FLinearColor::Black, TextureFilter::TF_Nearest);
     }
 
     for (int32 Y = 0; Y < Height; Y++)
@@ -66,6 +94,14 @@ void ALife::SetCell(int32 X, int32 Y, bool Value)
     AddAsh(FinalX, FinalY);
     LifeTexture->SetPixel(FinalY, Width - FinalX - 1, Value ? FLinearColor::White : FLinearColor::Black);
     LifeTexture->UpdateTexture();
+    if (Value)
+    {
+        PaintTexture->SetPixel(FinalY, Width - FinalX - 1, FLinearColor::White);
+    }
+    else
+    {
+        EraseTexture->SetPixel(FinalY, Width - FinalX - 1, FLinearColor::White);
+    }
 }
 
 bool ALife::GetCell(int32 X, int32 Y)

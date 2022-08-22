@@ -42,6 +42,24 @@ void UDynamicTexture::SetPixel(int32 X, int32 Y, FLinearColor Color)
 	SetPixelInternal(Ptr, Color.R * 255, Color.G * 255, Color.B * 255, Color.A * 255);
 }
 
+FLinearColor UDynamicTexture::GetPixel(int32 X, int32 Y)
+{
+	FLinearColor Result = FLinearColor::White;
+
+	// Get the pointer of the specified pixel
+	uint8* Ptr = GetPointerToPixel(X, Y);
+
+	uint8 Blue = *(Ptr);
+	uint8 Green = *(Ptr+1);
+	uint8 Red = *(Ptr+2);
+
+	Result.R = Red / 255.0f;
+	Result.G = Green / 255.0f;
+	Result.B = Blue / 255.0f;
+
+	return Result;
+}
+
 void UDynamicTexture::Fill(FLinearColor Color)
 {
 	// Get the base pointer of the pixel buffer
